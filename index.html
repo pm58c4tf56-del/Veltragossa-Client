@@ -619,13 +619,13 @@
 
 <script>
 (async function() {
-  // link do wersji
+  
   const versionUrl = "https://raw.githubusercontent.com/Mevinggs/Veltragossa-client/refs/heads/main/Version%20Beta/Version%20Beta.lua";
-  // API z linkiem do pobrania
+
   const apiUrl = "https://raw.githubusercontent.com/Mevinggs/aMamaki-Launcher/refs/heads/main/dollandiaistneijerzadchcenasuciszyc.lua";
 
   try {
-    // pobierz wersję
+  
     const resVer = await fetch(versionUrl);
     const verText = await resVer.text();
     const verLine = verText.split(/\r?\n/).map(l=>l.trim()).filter(Boolean)[0];
@@ -635,7 +635,7 @@
   }
 
   try {
-    // pobierz link do pobrania z API
+    
     const resApi = await fetch(apiUrl);
     const apiText = await resApi.text();
     const apiLine = apiText.split(/\r?\n/).map(l=>l.trim()).filter(Boolean)[0];
@@ -705,4 +705,5 @@
   </script>
 </body>
 </html>
+
 
