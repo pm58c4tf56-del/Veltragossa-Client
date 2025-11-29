@@ -73,6 +73,34 @@
       font-weight: 800;
       letter-spacing: 0.2px;
     }
+.links a {
+  position: relative;
+  transition: color 0.25s ease, transform 0.25s ease;
+}
+
+.links a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 100%;
+  height: 2px;
+  background: var(--green);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.25s ease;
+}
+
+.links a:hover {
+  color: white;
+  transform: translateY(-2px);
+}
+
+.links a:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
     .links {
       display: flex;
       gap: 22px;
@@ -245,15 +273,44 @@
       gap: 24px;
       align-items: center;
     }
+.showcase img {
+  transition: transform 0.3s ease;
+}
+
+.showcase img:hover {
+  transform: translateY(-10px) scale(1.05);
+}
+
     .showcase img {
       width: 100%;
       border-radius: 18px;
       border: 1px solid var(--border);
       box-shadow: 0 0 40px rgba(35,255,107,0.25);
     }
+
     .list {
       display: grid; gap: 10px;
     }
+.list li {
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.list li:hover {
+  transform: translateX(6px) scale(1.02);
+  box-shadow: 0 0 14px rgba(35,255,107,0.35);
+  border-color: rgba(35,255,107,0.6);
+  background: rgba(0,50,0,0.55);
+}
+
+.list li .tick {
+  transition: transform 0.25s ease, color 0.25s ease;
+}
+
+.list li:hover .tick {
+  transform: rotate(-10deg) scale(1.2);
+  color: #23ff6b;
+}
+
     .list li {
       display: flex; gap: 10px; align-items: center;
       padding: 10px 12px; border: 1px solid var(--border);
@@ -268,6 +325,16 @@
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 18px;
     }
+.opinions .op {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.opinions .op:hover {
+  transform: translateY(-6px) rotate(-1deg) scale(1.02);
+  box-shadow: 0 0 24px rgba(35,255,107,0.35);
+  border-color: rgba(35,255,107,0.6);
+}
+
     .op {
       background: var(--card);
       border: 1px solid var(--border);
@@ -579,6 +646,30 @@
 </section>
 
 <style>
+.step {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.step:hover {
+  transform: translateY(-8px) rotate(1deg) scale(1.03);
+  box-shadow: 0 0 20px rgba(35,255,107,0.4);
+  border-color: rgba(35,255,107,0.6);
+}
+
+.step-number {
+  transition: transform 0.3s ease;
+}
+
+.step:hover .step-number {
+  animation: pulseStep 1.2s infinite;
+}
+
+@keyframes pulseStep {
+  0%   { transform: scale(1); background:#00b34a; }
+  50%  { transform: scale(1.15); background:#23ff6b; }
+  100% { transform: scale(1); background:#00b34a; }
+}
+
 .step-number {
   width:48px;height:48px;border-radius:50%;
   background:#00b34a;color:#fff;
@@ -703,7 +794,26 @@
       }
     })();
   </script>
+<script>
+const clickGui = document.querySelector('.showcase img');
+
+clickGui.addEventListener('mousemove', e => {
+  const rect = clickGui.getBoundingClientRect();
+  const x = e.clientX - rect.left - rect.width / 2;
+  const y = e.clientY - rect.top - rect.height / 2;
+
+  
+  const moveX = Math.min(Math.max(x / 20, -15), 15);
+  const moveY = Math.min(Math.max(y / 20, -15), 15);
+
+  clickGui.style.transform = `translate(${moveX}px, ${moveY}px) scale(1.05)`;
+});
+
+clickGui.addEventListener('mouseleave', () => {
+  clickGui.style.transform = 'translate(0,0) scale(1)';
+});
+</script>
+
 </body>
 </html>
-
 
