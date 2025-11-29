@@ -465,8 +465,8 @@
 
 .stagger-animation > * {
   opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+  transform: translateY(15px);
+  transition: opacity 0.3s ease-out, transform 0.3s ease-out;
 }
 
 .stagger-animation.visible > * {
@@ -474,12 +474,12 @@
   transform: translateY(0);
 }
 
-.stagger-animation.visible > *:nth-child(1) { transition-delay: 0.1s; }
-.stagger-animation.visible > *:nth-child(2) { transition-delay: 0.2s; }
-.stagger-animation.visible > *:nth-child(3) { transition-delay: 0.3s; }
-.stagger-animation.visible > *:nth-child(4) { transition-delay: 0.4s; }
-.stagger-animation.visible > *:nth-child(5) { transition-delay: 0.5s; }
-.stagger-animation.visible > *:nth-child(6) { transition-delay: 0.6s; }
+.stagger-animation.visible > *:nth-child(1) { transition-delay: 0.05s; }
+.stagger-animation.visible > *:nth-child(2) { transition-delay: 0.1s; }
+.stagger-animation.visible > *:nth-child(3) { transition-delay: 0.15s; }
+.stagger-animation.visible > *:nth-child(4) { transition-delay: 0.2s; }
+.stagger-animation.visible > *:nth-child(5) { transition-delay: 0.25s; }
+.stagger-animation.visible > *:nth-child(6) { transition-delay: 0.3s; }
 
   </style>
 </head>
@@ -791,26 +791,31 @@
 }
 
 .step {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  will-change: transform, box-shadow;
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
 }
 
 .step:hover {
-  transform: translateY(-8px) rotate(1deg) scale(1.03);
-  box-shadow: 0 0 20px rgba(35,255,107,0.4);
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 0 12px rgba(35,255,107,0.4);
   border-color: rgba(35,255,107,0.6);
 }
 
 .step-number {
-  transition: transform 0.3s ease;
+  transition: transform 0.15s ease;
+  will-change: transform;
+  backface-visibility: hidden;
 }
 
 .step:hover .step-number {
-  animation: pulseStep 1.2s infinite;
+  animation: pulseStep 0.6s infinite;
 }
 
 @keyframes pulseStep {
   0%   { transform: scale(1); background:#00b34a; }
-  50%  { transform: scale(1.15); background:#23ff6b; }
+  50%  { transform: scale(1.05); background:#23ff6b; }
   100% { transform: scale(1); background:#00b34a; }
 }
 
@@ -1314,6 +1319,52 @@ clickGui.addEventListener('mouseleave', () => {
 });
 </script>
 
+<script>
+// Debounce function to prevent animation overlap
+function debounce(func, wait) {
+  let timeout;
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+}
+
+// Prevent animation conflicts on step hover
+document.addEventListener('DOMContentLoaded', () => {
+  const steps = document.querySelectorAll('.step');
+  
+  steps.forEach(step => {
+    let isAnimating = false;
+    
+    const handleMouseEnter = debounce(() => {
+      if (!isAnimating) {
+        isAnimating = true;
+        step.style.transition = 'transform 0.15s ease, box-shadow 0.15s ease';
+        setTimeout(() => {
+          isAnimating = false;
+        }, 150);
+      }
+    }, 50);
+    
+    const handleMouseLeave = debounce(() => {
+      if (!isAnimating) {
+        isAnimating = true;
+        step.style.transition = 'transform 0.15s ease, box-shadow 0.15s ease';
+        setTimeout(() => {
+          isAnimating = false;
+        }, 150);
+      }
+    }, 50);
+    
+    step.addEventListener('mouseenter', handleMouseEnter);
+    step.addEventListener('mouseleave', handleMouseLeave);
+  });
+});
+</script>
 </body>
 </html>
 
